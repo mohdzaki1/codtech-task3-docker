@@ -1,0 +1,67 @@
+#Hello codtech team, i am AWS DevOps intern. my third task is write dockerfile to containerize a simple web application.docker provide us easiness for deploying webapplication.
+#first of all i have to create a virtual machine as docker server.first i have to install docker in the serer.then i need to create a directory and go in it.
+ec2-user
+sudo su #(for root user)
+yum update -y #(server update command)
+yum install docker -y   #(command for installation of docker)
+mkdir mywebapp #(command of creating dorectory)
+cd mywebapp  #(command is change in directory
+#Now here we need to create 3 file which is one dockerfile and other two is pythonfile (app.py and requirements.txt).we are writting our pythonfiles and docker files following.
+nano app.py #(command of creating fileeditor) it is our first file.
+# app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello, Docker World!"
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+cntrl+x then y then enter #( type this for save and exit from editor)
+
+then we have create requirement file that is our second file.
+nano requirements.txt
+Flask==2.2.3
+Werkzeug==2.0.3
+cntrl+x then y then enter #( type this for save and exit from editor)
+
+#then now we can write  our dockerfile here.that is our third file.
+nano Dockerfile
+# Use the official Python image from the Docker Hub
+FROM python:3.10-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy the requirements file into the container
+COPY requirements.txt ./
+
+# Install any dependencies specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . .
+
+# Expose port 5000 to the outside world
+EXPOSE 5000
+
+# Define the command to run the Flask application
+CMD ["python", "app.py"]
+cntrl+x then t then enter  ( type this for save and exit from editor)
+
+#now we need to execute docker coommand for creation of dockerimage the run the container
+docker build -t mywebapp . (this command for creatinf docker image)
+docker run -p 5000:5000 mywebapp   (this command is for run the container on specific port no.)
+
+#afterr successfull execution of this comman.if we get some issue then we can get help from chatgpt.
+now pin on google http://http://13.60.78.217:5000/
+#now we can see our web appication.
+#thank you.
+
+
+
+
+
+
